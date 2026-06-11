@@ -1,50 +1,45 @@
 export async function onRequestPost(context) {
+  try {
+    const { request } = context;
 
-  if (request.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405 });
-  }
+    const body = await request.json().catch(() => ({}));
 
-  const req = context.request;
-  const body = await req.json().catch(() => ({}));
+    const ip =
+      request.headers.get("CF-Connecting-IP") || "unknown";
 
-  const ip =
-    req.headers.get("CF-Connecting-IP") || "unknown";
+    const country =
+      request.headers.get("CF-IPCountry") || "Unknown";
 
-  const country =
-    req.cf?.country ||
-    req.headers.get("CF-IPCountry") ||
-    "Unknown";
+    const ua = request.headers.get("User-Agent") || "";
 
-  const ua = req.headers.get("User-Agent") || "";
+    const device = ua.includes("Android")
+      ? "Android"
+      : ua.includes("iPhone")
+      ? "iPhone"
+      : "Desktop";
 
-  const device = ua.includes("Android")
-    ? "Android"
-    : ua.includes("iPhone")
-    ? "iPhone"
-    : "Desktop";
-
-  const text = `
-📖 NEW VISITOR
+    const text =
+`📖 NEW VISITOR
 
 IP: ${ip}
 Country: ${country}
 Device: ${device}
 
 Event: ${body.event || "unknown"}
-Progress: ${body.progress || 0}%
-  `;
+Progress: ${body.progress || 0}%`;
 
-  await fetch(
-    "https://api.telegram.org/bot8677546393:AAFA4_DqGX01cwZ8rygu22vkxkV4QZCvBRE/sendMessage",
-    {
+    await fetch("https://api.telegram.org/bot8677546393:AAFA4_DqGX01cwZ8rygu22vkxkV4QZCvBRE/sendMessage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: "5990407613",
         text
       })
-    }
-  );
+    });
 
-  return new Response("ok");
+    return new Response("ok");
+
+  } catch (err) {
+    return new Response("error: " + err.message, { status: 500 });
+  }
 }
