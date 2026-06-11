@@ -209,7 +209,7 @@ body::before {
   </div>
   
   <div class="signature-wrapper">
-    <span class="signature">Ph. Tran</span>
+    <span class="signature">P.T</span>
   </div>
 </div>
 
@@ -254,6 +254,7 @@ function track(event) {
 
 function showSlide() {
   if (index >= slides.length - 1) {
+    sentFinish = true;
     track("finished");
     return
   };
