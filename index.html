@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vài dòng tâm sự...</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  /* Tone màu xám xanh / xanh thẫm lịch lãm, đúng khí chất đàn ông trưởng thành */
+  background: linear-gradient(135deg, #ecefec, #dee5ea, #d5e0ea);
+  font-family: "Playfair Display", "Georgia", serif;
+  color: #2c3e50;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hiệu ứng mờ ảo phía sau làm điểm nhấn sang trọng */
+body::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(188, 204, 218, 0.4) 0%, rgba(255,255,255,0) 70%);
+  top: 15%;
+  left: 10%;
+  z-index: 0;
+  filter: blur(50px);
+}
+
+/* Khung chứa bao gồm cả chữ và thanh progress bên dưới */
+.box {
+  max-width: 750px;
+  width: 90%;
+  padding: 50px 40px 45px 40px; /* Tối ưu lại khoảng cách */
+  text-align: center;
+  z-index: 1;
+  
+  /* Khung nền mờ tinh tế (Glassmorphism) */
+  background: rgba(88, 153, 109, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(142, 156, 175, 0.15);
+  border: 1px solid rgba(146, 62, 62, 0.6);
+
+  /* Hiệu ứng ẩn/hiện mềm mượt cho riêng phần text bên trong khi đổi slide */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Phần text thay đổi theo từng slide */
+.text-content {
+  font-size: 1.45rem;
+  font-style: italic;
+  line-height: 1.9;
+  margin-bottom: 40px; /* Khoảng cách an toàn với thanh loading */
+  
+  /* Hiệu ứng ẩn/hiện mượt mà vào riêng phần text-content */
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(4px);
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              filter 1.2s ease;
+}
+
+/* Trạng thái hiện chữ của slide */
+.text-content.show {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Khung viền làm bệ đỡ cho thanh loading */
+.progress-container {
+  width: 220px; 
+  height: 7px;   
+  background: rgba(0, 0, 0, 0.15); 
+  margin: 0 auto 35px auto; /* Khoảng cách dưới cân đối với chữ ký */
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Thanh progress NỔI BẬT: Đổi sang dải màu hoàng hôn/neon tương phản hoàn toàn với nền */
+.progress {
+  height: 100%;
+  width: 0%;
+  border-radius: 10px;
+  
+  /* Dải màu Gradient Cam Ánh Kim sang Hồng Neon cực kỳ nổi bật trên nền xám xanh */
+  background: linear-gradient(90deg, #ff0844 0%, #ffb199 100%);
+  background-image: linear-gradient(
+    45deg, 
+    rgba(255, 255, 255, 0.2) 25%, 
+    transparent 25%, 
+    transparent 50%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.2) 75%, 
+    transparent 75%, 
+    transparent
+  );
+  background-size: 15px 15px; 
+  
+  /* Đổ bóng phát sáng cường độ cao bằng tone màu cam hồng rực rỡ */
+  box-shadow: 0 0 14px rgba(255, 8, 68, 0.85), 0 0 4px rgba(255, 177, 153, 0.5);
+  
+  /* Khai báo chuyển động mượt mà khi tăng phần trăm */
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Kích hoạt chuyển động cuộn sọc liên tục tạo cảm giác "đang load" sống động */
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+/* Chữ ký Cải tiến: Thiết kế gọn gàng, hiện đại, tối giản và lịch lãm */
+.signature-wrapper {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.signature {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: uppercase; /* Chữ in hoa hiện đại */
+  letter-spacing: 6px;       /* Giãn chữ rộng tinh tế tạo điểm nhấn */
+  color: #1e2d3d;
+  opacity: 0.85;
+  padding-bottom: 6px;
+  display: block;
+  position: relative;
+}
+
+/* Đường gạch ngang mảnh, mờ nhẹ dưới tên làm tăng tính thẩm mỹ */
+.signature::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%; /* Đường gạch không quá dài, nằm gọn ở giữa */
+  height: 1px;
+  background: rgba(44, 62, 80, 0.25);
+}
+
+/* Hiệu ứng chuyển động của lớp sọc ngầm */
+@keyframes progress-bar-stripes {
+  from { background-position: 0 0; }
+  to { background-position: 15px 0; }
+}
+
+/* ===================================================
+   RESPONSIVE CHO IPHONE 12 TRỞ LÊN (Base, Pro, Pro Max)
+   =================================================== */
+@media (max-width: 480px) {
+  body::before {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .box {
+    width: 92%;
+    padding: 35px 20px 30px 20px; 
+    border-radius: 20px;
+  }
+
+  .text-content {
+    font-size: 1.15rem; 
+    line-height: 1.7;   
+    margin-bottom: 30px;
+  }
+
+  .progress-container {
+    width: 160px; 
+    height: 6px;
+    margin-bottom: 25px;
+  }
+
+  .signature {
+    font-size: 0.95rem; /* Giảm nhẹ size trên mobile cho gọn gàng */
+    letter-spacing: 5px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="box">
+  <div class="text-content" id="text-content"></div>
+  
+  <div class="progress-container">
+    <div class="progress" id="progress"></div>
+  </div>
+  
+  <div class="signature-wrapper">
+    <span class="signature">Ph. Tran</span>
+  </div>
+</div>
+
+
+
+<script>
+/* ======================
+   TEXT SLIDES
+====================== */
+
+const slides = [
+`Ở cái tuổi này, nếu chưa gặp được đúng người, đàn ông thường chọn cách vùi đầu vào công việc. Không có những cuộc hẹn hò, bản thân lại có thêm 100% thời gian và năng lượng để tập trung cho sự nghiệp, cho những dự án và những mục tiêu lớn hơn của tương lai. Cuộc sống độc thân suy cho cùng cũng có cái tự do và bình yên riêng của nó.`,
+
+`Nhưng thỉnh thoảng nhìn lại, điều một người đàn ông trưởng thành thực sự tìm kiếm không phải là những cuộc chơi chớp nhoáng, mà là một sự gắn kết rõ ràng. Nếu có một người chịu gạt bỏ những mông lung, chịu mở lòng để bước vào thế giới của mình, bản thân chắc chắn sẽ không để họ phải chịu thiệt thòi.`,
+
+`Đàn ông ngoài 30 không hứa hẹn những điều viển vông, nhưng đủ sự vững chãi để mang lại một cảm giác an toàn tuyệt đối — cả về cuộc sống lẫn cảm xúc. Không còn những trò giận dỗi trẻ con hay những lần im lặng vô nghĩa, mà là sự kiên nhẫn để lắng nghe, là chỗ dựa bình yên nhất để bên nhau qua những ngày vui lẫn những khoảng lặng áp lực ngoài kia.`,
+
+`Chúng ta suy cho cùng đều cần thời gian để thấu hiểu trước khi nghĩ đến chuyện xa hơn. Chỉ cần đối phương chân thành và dám mở lòng, mình sẵn sàng bao dung và bảo vệ. Còn nếu không, thì lại tiếp tục quay về với guồng quay của công việc và deadline thôi. Chuyện tình cảm, vốn dĩ không nên cưỡng cầu.`
+];
+
+let index = 0;
+const textContent = document.getElementById("text-content");
+const progress = document.getElementById("progress");
+
+function track(event) {
+  fetch("/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event })
+  });
+}
+
+function showSlide() {
+  if (index >= slides.length) return;
+
+  textContent.classList.remove("show");
+
+  setTimeout(() => {
+    textContent.innerText = slides[index];
+    textContent.classList.add("show");
+
+    progress.style.width =
+      ((index + 1) / slides.length) * 100 + "%";
+
+    track("reading");
+
+    index++;
+
+    setTimeout(showSlide, 10000);
+  }, 500);
+}
+
+window.onload = () => {
+  track("opened");
+  showSlide();
+};
+</script>
+
+</body>
+</html>
