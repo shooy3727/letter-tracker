@@ -26,7 +26,7 @@ Country: ${country}
 Device: ${device}
 
 Event: ${body.event || "unknown"}
-Duration: ${body.duration || 0}s`;
+Duration: ${body.duration || 0}s;
 Progress: ${body.progress || 0}%`;
 
     await fetch("https://api.telegram.org/bot8677546393:AAFA4_DqGX01cwZ8rygu22vkxkV4QZCvBRE/sendMessage", {
