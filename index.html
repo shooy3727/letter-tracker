@@ -235,49 +235,28 @@ const progress = document.getElementById("progress");
 
 let index = 0;
 let startTime = Date.now();
-let lastProgress = 0;
-let finished = false;
-let hasOpened = false;
+let sentFinish = false;
 
 function getDuration() {
   return Math.floor((Date.now() - startTime) / 1000);
 }
 
-function updateProgress() {
-  lastProgress = Math.round(((index) / slides.length) * 100);
-  progress.style.width = lastProgress + "%";
-}
-
-function send(event, extra = {}) {
+function track(event) {
   fetch("/track", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+    body: JSON.stringify({ 
       event,
       duration: getDuration(),
-      progress: lastProgress,
-      ...extra
     })
   }).catch(() => {});
 }
 
-// OPEN
-window.onload = () => {
-  startTime = Date.now();
-
-  if (!hasOpened) {
-    hasOpened = true;
-    send("opened");
-  }
-
-  showSlide();
-};
-
 function showSlide() {
-  if (index >= slides.length) {
-    finish();
-    return;
-  }
+  if (index >= slides.length - 1) {
+    track("finished");
+    return
+  };
 
   textContent.classList.remove("show");
 
@@ -285,7 +264,8 @@ function showSlide() {
     textContent.innerText = slides[index];
     textContent.classList.add("show");
 
-    updateProgress();
+    progress.style.width =
+      ((index + 1) / slides.length) * 100 + "%";
 
     index++;
 
@@ -293,31 +273,11 @@ function showSlide() {
   }, 500);
 }
 
-// FINISH (gọi 1 lần duy nhất)
-function finish() {
-  if (finished) return;
-  finished = true;
-
-  send("finish");
-}
-
-// USER ĐÓNG TAB → đọc dở
-window.addEventListener("beforeunload", () => {
-  if (finished) return;
-
-  const data = {
-    event: "abandon",
-    duration: getDuration(),
-    progress: lastProgress
-  };
-
-  navigator.sendBeacon(
-    "/track",
-    new Blob([JSON.stringify(data)], {
-      type: "application/json"
-    })
-  );
-});
+window.onload = () => {
+  startTime = Date.now();
+  track("opened");
+  showSlide();
+};
 </script>
 
 </body>

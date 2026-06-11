@@ -1,28 +1,20 @@
 export async function onRequestPost(context) {
-  const { request } = context;
-
-  let body = {};
   try {
-    body = await request.json();
-  } catch (e) {}
+    const { request } = context;
+    const body = await request.json().catch(() => ({}));
 
-  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-  const country = request.headers.get("CF-IPCountry") || "VN";
-  const ua = request.headers.get("User-Agent") || "";
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    const country = request.headers.get("CF-IPCountry") || "VN";
 
-  const device = ua.includes("Android")
-    ? "Android"
-    : ua.includes("iPhone")
-    ? "iPhone"
-    : "Desktop";
+    const ua = request.headers.get("User-Agent") || "";
 
-  let label = "📖 NEW VISITOR";
+    const device = ua.includes("Android")
+      ? "Android"
+      : ua.includes("iPhone")
+      ? "iPhone"
+      : "Desktop";
 
-  if (body.event === "opened") label = "📖 OPENED";
-  if (body.event === "finish") label = "🏁 FINISH (READ DONE)";
-  if (body.event === "abandon") label = "⚠️ ABANDONED (READING STOPPED)";
-
-  const text = `${label}
+    const text = `📖 NEW VISITOR
 
 IP: ${ip}
 Country: ${country}
@@ -32,17 +24,17 @@ Event: ${body.event || "unknown"}
 Duration: ${body.duration || 0}s
 Progress: ${body.progress || 0}%`;
 
-  await fetch(
-    "https://api.telegram.org/botTOKEN/sendMessage",
-    {
+    await fetch("https://api.telegram.org/bot8677546393:AAFA4_DqGX01cwZ8rygu22vkxkV4QZCvBRE/sendMessage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        chat_id: "CHAT_ID",
+        chat_id: "5990407613",
         text
       })
-    }
-  );
+    });
 
-  return new Response("ok");
+    return new Response("ok");
+  } catch (err) {
+    return new Response("error: " + err.message, { status: 500 });
+  }
 }
