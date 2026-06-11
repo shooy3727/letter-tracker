@@ -230,10 +230,16 @@ const slides = [
 `Chúng ta suy cho cùng đều cần thời gian để thấu hiểu trước khi nghĩ đến chuyện xa hơn. Chỉ cần đối phương chân thành và dám mở lòng, mình sẵn sàng bao dung và bảo vệ. Còn nếu không, thì lại tiếp tục quay về với guồng quay của công việc và deadline thôi. Chuyện tình cảm, vốn dĩ không nên cưỡng cầu.`
 ];
 
-let index = 0;
-let startTime = Date.now();
 const textContent = document.getElementById("text-content");
 const progress = document.getElementById("progress");
+
+let index = 0;
+let startTime = Date.now();
+let sentFinish = false;
+
+function getDuration() {
+  return Math.floor((Date.now() - startTime) / 1000);
+}
 
 function track(event) {
   const duration = Math.floor((Date.now() - startTime) / 1000);
@@ -243,13 +249,19 @@ function track(event) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ 
       event,
-      duration
+      duration: getDuration(),
     })
-  });
+  }).catch(() => {});
 }
 
 function showSlide() {
-  if (index >= slides.length) return;
+  if (index >= slides.length) {
+    if (!sentFinish) {
+      sentFinish = true;
+      track("finish", 100);
+    }
+    return
+  };
 
   textContent.classList.remove("show");
 
@@ -267,6 +279,7 @@ function showSlide() {
 }
 
 window.onload = () => {
+  startTime = Date.now();
   track("opened");
   showSlide();
 };
