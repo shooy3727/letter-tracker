@@ -219,6 +219,20 @@ body::before {
 
 
 <script>
+
+// Audio
+const audio = document.getElementById("bg-music");
+
+function unlock() {
+  audio.volume = 0.5;
+
+  audio.play().catch(console.log);
+
+  document.removeEventListener("pointerdown", unlock);
+}
+
+document.addEventListener("pointerdown", unlock);
+
 /* ======================
    TEXT SLIDES
 ====================== */
