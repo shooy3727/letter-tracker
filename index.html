@@ -231,14 +231,20 @@ const slides = [
 ];
 
 let index = 0;
+let startTime = Date.now();
 const textContent = document.getElementById("text-content");
 const progress = document.getElementById("progress");
 
 function track(event) {
+  const duration = Math.floor((Date.now() - startTime) / 1000);
+
   fetch("/track", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ event })
+    body: JSON.stringify({ 
+      event,
+      duration
+    })
   });
 }
 
