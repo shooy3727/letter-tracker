@@ -235,33 +235,49 @@ const progress = document.getElementById("progress");
 
 let index = 0;
 let startTime = Date.now();
-let sentFinish = false;
+let lastProgress = 0;
+let finished = false;
+let hasOpened = false;
 
 function getDuration() {
   return Math.floor((Date.now() - startTime) / 1000);
 }
 
-function track(event) {
-  const duration = Math.floor((Date.now() - startTime) / 1000);
+function updateProgress() {
+  lastProgress = Math.round(((index) / slides.length) * 100);
+  progress.style.width = lastProgress + "%";
+}
 
+function send(event, extra = {}) {
   fetch("/track", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ 
+    body: JSON.stringify({
       event,
       duration: getDuration(),
+      progress: lastProgress,
+      ...extra
     })
   }).catch(() => {});
 }
 
+// OPEN
+window.onload = () => {
+  startTime = Date.now();
+
+  if (!hasOpened) {
+    hasOpened = true;
+    send("opened");
+  }
+
+  showSlide();
+};
+
 function showSlide() {
   if (index >= slides.length) {
-    if (!sentFinish) {
-      sentFinish = true;
-      track("finish", 100);
-    }
-    return
-  };
+    finish();
+    return;
+  }
 
   textContent.classList.remove("show");
 
@@ -269,8 +285,7 @@ function showSlide() {
     textContent.innerText = slides[index];
     textContent.classList.add("show");
 
-    progress.style.width =
-      ((index + 1) / slides.length) * 100 + "%";
+    updateProgress();
 
     index++;
 
@@ -278,11 +293,31 @@ function showSlide() {
   }, 500);
 }
 
-window.onload = () => {
-  startTime = Date.now();
-  track("opened");
-  showSlide();
-};
+// FINISH (gọi 1 lần duy nhất)
+function finish() {
+  if (finished) return;
+  finished = true;
+
+  send("finish");
+}
+
+// USER ĐÓNG TAB → đọc dở
+window.addEventListener("beforeunload", () => {
+  if (finished) return;
+
+  const data = {
+    event: "abandon",
+    duration: getDuration(),
+    progress: lastProgress
+  };
+
+  navigator.sendBeacon(
+    "/track",
+    new Blob([JSON.stringify(data)], {
+      type: "application/json"
+    })
+  );
+});
 </script>
 
 </body>
