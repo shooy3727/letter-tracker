@@ -18,10 +18,11 @@
 
 body {
   min-height: 100vh;
-  /* Tone màu xám xanh / xanh thẫm lịch lãm, đúng khí chất đàn ông trưởng thành */
-  background: linear-gradient(135deg, #ecefec, #dee5ea, #d5e0ea);
+  /* HÌNH NỀN: Phong cảnh Anime Nhật Bản cặp đôi ngồi trên thảm cỏ, xung quanh là cây cối */
+  background: url('letter.png') no-repeat center center;
+  background-size: cover;
   font-family: "Playfair Display", "Georgia", serif;
-  color: #2c3e50;
+  color: #ffffff; /* Đổi màu chữ mặc định sang trắng để tương phản tốt trên nền ảnh */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,34 +30,33 @@ body {
   position: relative;
 }
 
-/* Hiệu ứng mờ ảo phía sau làm điểm nhấn sang trọng */
+/* Lớp phủ Gradient tối mờ giúp bức ảnh nền dịu lại, tăng tối đa độ sắc nét cho khối văn bản */
 body::before {
   content: "";
   position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(188, 204, 218, 0.4) 0%, rgba(255,255,255,0) 70%);
-  top: 15%;
-  left: 10%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.4), rgba(30, 41, 59, 0.5));
   z-index: 0;
-  filter: blur(50px);
 }
 
-/* Khung chứa bao gồm cả chữ và thanh progress bên dưới */
+/* Khung chứa bao gồm cả chữ và thanh progress bên dưới - Thiết kế Glassmorphism Cao Cấp */
 .box {
   max-width: 750px;
   width: 90%;
-  padding: 50px 40px 45px 40px; /* Tối ưu lại khoảng cách */
+  padding: 55px 45px 50px 45px;
   text-align: center;
   z-index: 1;
   
-  /* Khung nền mờ tinh tế (Glassmorphism) */
-  background: rgba(88, 153, 109, 0.35);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 24px;
-  box-shadow: 0 15px 35px rgba(142, 156, 175, 0.15);
-  border: 1px solid rgba(146, 62, 62, 0.6);
+  /* Nền kính mờ sâu, phối tông tối nhẹ mượt mà hợp với sắc xanh thiên nhiên */
+  background: rgba(15, 28, 22, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 
   /* Hiệu ứng ẩn/hiện mềm mượt cho riêng phần text bên trong khi đổi slide */
   opacity: 1;
@@ -68,7 +68,9 @@ body::before {
   font-size: 1.45rem;
   font-style: italic;
   line-height: 1.9;
-  margin-bottom: 40px; /* Khoảng cách an toàn với thanh loading */
+  margin-bottom: 40px;
+  color: #f8fafc; /* Màu chữ trắng mờ tuyết sang trọng */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Tạo chiều sâu nhẹ cho chữ */
   
   /* Hiệu ứng ẩn/hiện mượt mà vào riêng phần text-content */
   opacity: 0;
@@ -89,23 +91,22 @@ body::before {
 /* Khung viền làm bệ đỡ cho thanh loading */
 .progress-container {
   width: 220px; 
-  height: 7px;   
-  background: rgba(0, 0, 0, 0.15); 
-  margin: 0 auto 35px auto; /* Khoảng cách dưới cân đối với chữ ký */
+  height: 6px;   
+  background: rgba(255, 255, 255, 0.2); 
+  margin: 0 auto 35px auto;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* Thanh progress NỔI BẬT: Đổi sang dải màu hoàng hôn/neon tương phản hoàn toàn với nền */
+/* Thanh progress NỔI BẬT: Đổi sang tone màu Mint/Lục bảo phát sáng dịu nghệ thuật hòa quyện không gian cỏ cây */
 .progress {
   height: 100%;
   width: 0%;
   border-radius: 10px;
   
-  /* Dải màu Gradient Cam Ánh Kim sang Hồng Neon cực kỳ nổi bật trên nền xám xanh */
-  background: linear-gradient(90deg, #ff0844 0%, #ffb199 100%);
+  background: linear-gradient(90deg, #34d399 0%, #059669 100%);
   background-image: linear-gradient(
     45deg, 
     rgba(255, 255, 255, 0.2) 25%, 
@@ -118,8 +119,8 @@ body::before {
   );
   background-size: 15px 15px; 
   
-  /* Đổ bóng phát sáng cường độ cao bằng tone màu cam hồng rực rỡ */
-  box-shadow: 0 0 14px rgba(255, 8, 68, 0.85), 0 0 4px rgba(255, 177, 153, 0.5);
+  /* Đổ bóng phát sáng mờ ảo dịu nhẹ */
+  box-shadow: 0 0 14px rgba(52, 211, 153, 0.7), 0 0 4px rgba(5, 150, 105, 0.4);
   
   /* Khai báo chuyển động mượt mà khi tăng phần trăm */
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -138,10 +139,10 @@ body::before {
   font-family: "Cormorant Garamond", serif;
   font-size: 1.1rem;
   font-weight: 500;
-  text-transform: uppercase; /* Chữ in hoa hiện đại */
-  letter-spacing: 6px;       /* Giãn chữ rộng tinh tế tạo điểm nhấn */
-  color: #1e2d3d;
-  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: #f1f5f9;
+  opacity: 0.9;
   padding-bottom: 6px;
   display: block;
   position: relative;
@@ -153,9 +154,9 @@ body::before {
   position: absolute;
   bottom: 0;
   left: 15%;
-  width: 70%; /* Đường gạch không quá dài, nằm gọn ở giữa */
+  width: 70%;
   height: 1px;
-  background: rgba(44, 62, 80, 0.25);
+  background: rgba(241, 245, 249, 0.3);
 }
 
 /* Hiệu ứng chuyển động của lớp sọc ngầm */
@@ -168,31 +169,26 @@ body::before {
    RESPONSIVE CHO IPHONE 12 TRỞ LÊN (Base, Pro, Pro Max)
    =================================================== */
 @media (max-width: 480px) {
-  body::before {
-    width: 250px;
-    height: 250px;
-  }
-  
   .box {
     width: 92%;
-    padding: 35px 20px 30px 20px; 
-    border-radius: 20px;
+    padding: 40px 24px 35px 24px; 
+    border-radius: 22px;
   }
 
   .text-content {
-    font-size: 1.15rem; 
-    line-height: 1.7;   
+    font-size: 1.18rem; 
+    line-height: 1.75;   
     margin-bottom: 30px;
   }
 
   .progress-container {
-    width: 160px; 
-    height: 6px;
+    width: 170px; 
+    height: 5px;
     margin-bottom: 25px;
   }
 
   .signature {
-    font-size: 0.95rem; /* Giảm nhẹ size trên mobile cho gọn gàng */
+    font-size: 0.95rem;
     letter-spacing: 5px;
   }
 }
@@ -201,7 +197,6 @@ body::before {
 
 <body>
 
-<!-- Đặt thẻ Audio ở đây (Ngay sau thẻ body) -->
 <audio id="bg-music" src="snap.mp3" loop></audio>
 
 <div class="box" id="box">
@@ -215,8 +210,6 @@ body::before {
     <span class="signature">P.T</span>
   </div>
 </div>
-
-
 
 <script>
 
@@ -244,7 +237,53 @@ const slides = [
 
 `Đàn ông không hứa hẹn những điều viển vông, nhưng đủ sự vững chãi để mang lại một cảm giác an toàn tuyệt đối — cả về cuộc sống lẫn cảm xúc. Không còn những trò giận dỗi trẻ con hay những lần im lặng vô nghĩa, mà là sự kiên nhẫn để lắng nghe, là chỗ dựa bình yên nhất để bên nhau qua những ngày vui lẫn những khoảng lặng áp lực ngoài kia.`,
 
-`Chúng ta suy cho cùng đều cần thời gian để thấu hiểu trước khi nghĩ đến chuyện xa hơn. Chỉ cần đối phương chân thành và dám mở lòng, mình sẵn sàng bao dung và bảo vệ. Còn nếu không, thì lại tiếp tục quay về với guồng quay của công việc và deadline thôi. Chuyện tình cảm, vốn dĩ không nên cưỡng cầu.`
+`Chúng ta suy cho cùng đều cần thời gian để thấu hiểu trước khi nghĩ đến chuyện xa hơn. Chỉ cần đối phương chân thành và dám mở lòng, mình sẵn sàng bao dung và bảo vệ. Còn nếu không, thì lại tiếp tục quay về với guồng quay của công việc và deadline thôi. Chuyện tình cảm, vốn dĩ không nên cưỡng cầu.`,
+
+`Về những mối quan hệ cần sự mở lòng từ hai phía
+
+Có những giai đoạn trong cuộc sống, con người bắt đầu nhìn tình cảm không còn theo kiểu “có hay không”, mà theo một cách thực tế hơn: liệu hai người có đang cùng bước về phía nhau hay không.
+
+Ban đầu, một mối quan hệ thường bắt đầu rất đơn giản. Một vài cuộc trò chuyện, vài lần nhắn tin, vài sự tò mò nhỏ. Không ai biết trước điều gì sẽ xảy ra, và cũng không ai đặt ra quá nhiều kỳ vọng ngay từ đầu.
+
+Nhưng theo thời gian, sự khác biệt bắt đầu rõ ràng hơn. Có người dần chủ động tìm hiểu, đặt câu hỏi, muốn biết nhiều hơn về đối phương. Cũng có người chỉ dừng lại ở việc phản hồi, không tiến thêm một bước nào đáng kể.
+
+Chính sự lệch nhịp này tạo ra một điều rất đặc biệt: một bên bắt đầu đầu tư cảm xúc, còn bên kia vẫn đứng ở vị trí quan sát.
+
+Không phải lúc nào điều đó cũng có nghĩa là thiếu thiện chí. Đôi khi chỉ đơn giản là mỗi người đang ở một trạng thái khác nhau. Có người sẵn sàng mở lòng. Có người vẫn đang giữ khoảng cách. Có người cần thời gian. Có người chưa tìm thấy sự kết nối đủ để tiến xa hơn.
+
+Và điều quan trọng là: không ai sai trong giai đoạn này.
+
+Tình cảm, nếu nhìn một cách thực tế, không phải là thứ có thể ép buộc hoặc đẩy nhanh bằng sự cố gắng từ một phía. Nó cần sự đồng thuận tự nhiên từ cả hai người. Cần một mức độ tò mò nhất định, một chút chủ động, và quan trọng hơn là mong muốn thực sự muốn hiểu nhau nhiều hơn.
+
+Nếu thiếu một trong những yếu tố đó, mối quan hệ sẽ luôn ở trạng thái lưng chừng. Không đủ xa để quên, nhưng cũng không đủ gần để gọi tên.
+
+Trong những tình huống như vậy, điều khó nhất không phải là quyết định tiến hay lùi, mà là giữ được sự bình tĩnh để quan sát thay vì vội vàng diễn giải mọi tín hiệu nhỏ thành điều gì đó quá lớn.
+
+Một tin nhắn chậm lại không nhất thiết là sự thay đổi cảm xúc. Một câu trả lời ngắn không chắc là sự lạnh nhạt. Một khoảng im lặng cũng không luôn mang nghĩa kết thúc.
+
+Nhưng nếu nhìn tổng thể, khi sự chủ động chỉ đến từ một phía trong thời gian dài, thì câu hỏi cần đặt ra không phải là “làm sao để thay đổi điều này”, mà là “liệu đây có phải là nhịp phù hợp để tiếp tục đầu tư hay không”.
+
+Trong bất kỳ mối quan hệ nào, sự mở lòng luôn phải đến từ hai phía. Một người có thể là người khởi đầu, nhưng không thể là người duy trì tất cả. Một người có thể quan tâm, nhưng không thể gánh toàn bộ sự phát triển của kết nối đó.
+
+Có những người sẽ gặp nhau đúng thời điểm. Khi cả hai đều sẵn sàng, mọi thứ diễn ra rất tự nhiên: có sự tò mò, có sự phản hồi, có mong muốn gặp mặt, và có sự tiến triển rõ ràng.
+
+Nhưng cũng có những mối quan hệ dừng lại ở mức “có thể”. Có thể hợp. Có thể không. Có thể phát triển. Có thể chỉ dừng ở đây. Và việc xác định điều đó thường không đến từ cảm xúc, mà đến từ hành động thực tế của cả hai người trong một khoảng thời gian đủ dài.
+
+Trong những tình huống như vậy, lựa chọn trưởng thành nhất không phải là cố gắng thay đổi cảm xúc của người khác, cũng không phải là rút lui vì thất vọng. Mà là quay lại với chính nhịp sống của mình, trong khi vẫn để cánh cửa ở trạng thái mở cho những kết nối thật sự tương xứng.
+
+Không đóng lại, nhưng cũng không đẩy quá mạnh.
+
+Không ép buộc, nhưng cũng không chạy theo một chiều.
+
+Chỉ đơn giản là giữ sự cân bằng giữa công việc, cuộc sống cá nhân, và những mối quan hệ có thể đến một cách tự nhiên.
+
+Và nếu một người thực sự muốn bước vào cuộc sống của mình, họ sẽ không cần quá nhiều tín hiệu phức tạp để bắt đầu. Họ sẽ chủ động hơn một chút, tò mò hơn một chút, và rõ ràng hơn trong cách họ hiện diện.
+
+Còn nếu không, thì việc mọi thứ dừng lại ở mức “có thể” cũng chỉ là một phần rất bình thường của cuộc sống.
+
+Không cần gượng ép. Không cần diễn giải quá nhiều. Và cũng không cần coi đó là một mất mát.
+
+Chỉ đơn giản là tiếp tục đi theo hướng của mình, với sự bình thản, và với một cánh cửa vẫn mở cho những điều thật sự phù hợp.`
 ];
 
 const textContent = document.getElementById("text-content");
